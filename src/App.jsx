@@ -11,6 +11,7 @@ import FocusPage from './pages/FocusPage'
 import MathPage from './pages/MathPage'
 import LSPage from './pages/LSPage'
 import ProgressPage from './pages/ProgressPage'
+import StudyBuddy from './components/StudyBuddy'
 
 const NAV = [
   { id: '', label: 'Home', short: 'Home', icon: House },
@@ -101,6 +102,8 @@ export default function App() {
       <main id="main" className="main" ref={mainRef} tabIndex={-1} aria-label={TITLES[page]} style={{ outline: 'none' }}>
         {content}
       </main>
+
+      <StudyBuddy page={page} />
 
       <nav className="bottom-nav" aria-label="Main">
         {NAV.map((n) => {

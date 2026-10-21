@@ -752,3 +752,70 @@ button { font: inherit; color: inherit; }
   }
   .flashcard { transition: none; }
 }
+
+/* ---------- Study buddy (Petal) ---------- */
+
+.buddy {
+  position: fixed; left: 0; bottom: 12px; z-index: 50;
+  width: 60px; height: 60px;
+  transition-property: transform; transition-timing-function: linear;
+  pointer-events: none;
+}
+.buddy-body {
+  pointer-events: auto; position: relative;
+  width: 100%; height: 100%; padding: 0; border: 0; background: none; cursor: pointer;
+  border-radius: 50%;
+}
+.buddy-body svg { width: 100%; height: 100%; display: block; overflow: visible; transition: transform 0.25s var(--ease); }
+.buddy-body:hover .buddy-bob { transform: translateY(-2px); }
+.buddy-bob { transition: transform 0.2s var(--ease); transform-box: fill-box; }
+.buddy-eyes { animation: buddy-blink 5.5s infinite; transform-box: fill-box; transform-origin: center; }
+.buddy-sprout { animation: sway 4s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+.foot { transform-box: fill-box; transform-origin: center; }
+
+.buddy.walking .buddy-bob { animation: buddy-bob 0.5s ease-in-out infinite; }
+.buddy.walking .foot-l { animation: buddy-step 0.5s ease-in-out infinite; }
+.buddy.walking .foot-r { animation: buddy-step 0.5s ease-in-out infinite 0.25s; }
+.buddy.hop .buddy-bob { animation: buddy-hop 0.6s var(--ease); }
+.buddy.sleeping .buddy-bob { animation: buddy-breathe 3.2s ease-in-out infinite; }
+
+.buddy-z {
+  position: absolute; top: -4px; right: -2px; font-family: var(--font-head); font-weight: 600;
+  color: var(--rose-400); font-size: 0.85rem; animation: buddy-z 2.6s ease-in-out infinite;
+}
+.buddy-z span { font-size: 0.65rem; margin-left: 1px; vertical-align: super; }
+
+@keyframes buddy-blink { 0%, 94%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } }
+@keyframes buddy-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2.5px); } }
+@keyframes buddy-step { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+@keyframes buddy-hop { 0%, 100% { transform: translateY(0); } 35% { transform: translateY(-9px); } 60% { transform: translateY(0); } 80% { transform: translateY(-3px); } }
+@keyframes buddy-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.025, 0.98); } }
+@keyframes buddy-z { 0% { opacity: 0; transform: translate(0, 4px); } 30%, 70% { opacity: 1; } 100% { opacity: 0; transform: translate(6px, -8px); } }
+
+.buddy-bubble {
+  pointer-events: auto; position: absolute; bottom: calc(100% + 10px);
+  width: min(270px, calc(100vw - 32px));
+  background: var(--paper); border: 1px solid var(--blush-200); border-radius: 18px;
+  box-shadow: var(--shadow-lg); padding: 10px 12px 10px 14px;
+  animation: rise 0.25s var(--ease);
+}
+.buddy-bubble.left { left: 4px; }
+.buddy-bubble.right { right: 4px; }
+.buddy-bubble::after {
+  content: ''; position: absolute; bottom: -7px; width: 12px; height: 12px;
+  background: var(--paper); border-right: 1px solid var(--blush-200); border-bottom: 1px solid var(--blush-200);
+  transform: rotate(45deg);
+}
+.buddy-bubble.left::after { left: 22px; }
+.buddy-bubble.right::after { right: 22px; }
+.buddy-bubble p { font-size: 0.9rem; margin: 2px 0 8px; color: var(--ink); }
+.buddy-bubble-head { display: flex; align-items: center; justify-content: space-between; margin: -2px -4px 0 0; }
+.buddy-bubble-head .icon-btn { width: 28px; height: 28px; }
+.buddy-bubble-head .icon-btn svg { width: 14px; height: 14px; }
+.buddy-name { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rose-500); display: inline-flex; align-items: center; gap: 4px; }
+.buddy-actions { display: flex; gap: 4px; flex-wrap: wrap; margin-left: -4px; }
+
+@media (max-width: 860px) {
+  .buddy { width: 52px; height: 52px; bottom: calc(70px + env(safe-area-inset-bottom)); }
+}
+@media print { .buddy { display: none; } }

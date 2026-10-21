@@ -32,6 +32,7 @@ src/content/            ← all study material (edit here, not in components)
   ls1a/lessons.js       LS 1A lessons
   resources.js          external links (kept separate from original content)
   messages.js           encouragement messages
+  buddy.js              Petal the study buddy: tips per page + cheer-up lines
 src/state/              tasks/review/flashcards store + timer (timestamp-based)
 src/components/, src/pages/
 scripts/verify-content.mjs   recomputes every numeric answer independently

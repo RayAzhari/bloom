@@ -66,7 +66,7 @@ const sanitizeActivity = (x) =>
     ? x.filter((a) => isObj(a) && str(a.label) && typeof a.at === 'number').map((a) => ({ type: str(a.type, 30), label: str(a.label, 200), at: a.at })).slice(0, 40)
     : undefined
 
-const sanitizeSettings = (x) => (isObj(x) ? { sound: x.sound !== false } : undefined)
+const sanitizeSettings = (x) => (isObj(x) ? { sound: x.sound !== false, buddy: x.buddy !== false } : undefined)
 
 function starterTasks() {
   const t = todayKey()
@@ -87,7 +87,7 @@ export function BloomProvider({ children }) {
   const [cards, setCards] = usePersistentState('flashcards', {}, sanitizeMap((v) => v.status === 'know' || v.status === 'review'))
   const [attempts, setAttempts] = usePersistentState('attempts', {}, sanitizeMap((v) => typeof v.correct === 'boolean'))
   const [activity, setActivity] = usePersistentState('activity', [], sanitizeActivity)
-  const [settings, setSettings] = usePersistentState('settings', { sound: true }, sanitizeSettings)
+  const [settings, setSettings] = usePersistentState('settings', { sound: true, buddy: true }, sanitizeSettings)
 
   const log = useCallback((type, label) => {
     setActivity((a) => [{ type, label, at: Date.now() }, ...a].slice(0, 40))

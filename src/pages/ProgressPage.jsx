@@ -20,7 +20,7 @@ function weekStart() {
 }
 
 export default function ProgressPage() {
-  const { tasks, sessions, cards, attempts, activity } = useBloom()
+  const { tasks, sessions, cards, attempts, activity, settings, setSettings } = useBloom()
   const [confirm, setConfirm] = useState(false)
   const since = weekStart()
   const todayStr = new Date().toDateString()
@@ -163,6 +163,13 @@ export default function ProgressPage() {
         ) : (
           <Empty title="Nothing here yet">Completed tasks, focus sessions, and practice will appear here as you go.</Empty>
         )}
+      </section>
+
+      <section className="card flat small row between">
+        <span className="muted"><strong style={{ color: 'var(--ink)' }}>Petal, your study buddy</strong>: strolls around, shares tips when tapped, and naps during focus sessions.</span>
+        <button className="btn btn-outline btn-sm" onClick={() => setSettings((s) => ({ ...s, buddy: s.buddy === false }))} aria-pressed={settings.buddy !== false}>
+          {settings.buddy !== false ? 'Hide Petal' : 'Bring Petal back'}
+        </button>
       </section>
 
       <section className="card flat small muted row between">
