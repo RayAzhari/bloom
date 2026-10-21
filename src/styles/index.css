@@ -819,3 +819,23 @@ button { font: inherit; color: inherit; }
   .buddy { width: 52px; height: 52px; bottom: calc(70px + env(safe-area-inset-bottom)); }
 }
 @media print { .buddy { display: none; } }
+
+/* Petal: little dance + music notes */
+.buddy.dancing .buddy-bob { animation: buddy-dance 0.9s ease-in-out infinite; transform-origin: 50% 90%; }
+.buddy.dancing .arm-l { animation: buddy-wave-l 0.45s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 100% 0%; }
+.buddy.dancing .arm-r { animation: buddy-wave-r 0.45s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 0% 0%; }
+.buddy.dancing .foot-l { animation: buddy-step 0.45s ease-in-out infinite; }
+.buddy.dancing .foot-r { animation: buddy-step 0.45s ease-in-out infinite 0.22s; }
+.buddy-notes { position: absolute; top: -10px; left: -6px; right: -6px; pointer-events: none; color: var(--rose-400); font-weight: 700; }
+.buddy-notes span { position: absolute; font-size: 0.9rem; animation: buddy-note 1.6s ease-in-out infinite; }
+.buddy-notes span:first-child { left: 0; }
+.buddy-notes span:last-child { right: 0; color: var(--sage-500); animation-delay: 0.8s; }
+@keyframes buddy-dance {
+  0%, 100% { transform: rotate(0) translateY(0); }
+  25% { transform: rotate(-9deg) translateY(-3px); }
+  50% { transform: rotate(0) translateY(0); }
+  75% { transform: rotate(9deg) translateY(-3px); }
+}
+@keyframes buddy-wave-l { from { transform: rotate(0); } to { transform: rotate(-35deg); } }
+@keyframes buddy-wave-r { from { transform: rotate(0); } to { transform: rotate(35deg); } }
+@keyframes buddy-note { 0% { opacity: 0; transform: translateY(6px); } 30%, 70% { opacity: 1; } 100% { opacity: 0; transform: translateY(-12px); } }

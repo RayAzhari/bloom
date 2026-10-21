@@ -8,8 +8,9 @@ import { useToast } from './ui'
 
 // Petal: a small study buddy that strolls along the bottom of the screen.
 // - Click for a tip that fits the current page (plus the odd cheer-up line).
-// - Very occasionally offers a tip on her own, and never during a focus session:
-//   she naps quietly so she isn't a distraction.
+// - Offers a tip on her own every minute or so (and sometimes when you change pages),
+//   but never during a focus session: she naps quietly so she isn't a distraction.
+// - Between strolls she sometimes takes a little nap or does a little dance.
 // - Respects prefers-reduced-motion (stays put, no bobbing).
 // - Can be hidden; the choice is saved in settings.
 
@@ -49,6 +50,7 @@ export default function StudyBuddy({ page }) {
   const [facing, setFacing] = useState(-1)
   const [walking, setWalking] = useState(false)
   const [hop, setHop] = useState(false)
+  const [mood, setMood] = useState(null) // null | 'nap' | 'dance'
   const [bubble, setBubble] = useState(null) // { text, live }
   const used = useRef(new Set())
   const bubbleTimer = useRef(null)
@@ -74,7 +76,7 @@ export default function StudyBuddy({ page }) {
     if (resting) return buddyLines.resting[Math.floor(Math.random() * buddyLines.resting.length)]
     const pageLines = buddyLines[page || 'home'] || buddyLines.home
     // Roughly: data-aware first, then page tips, with a cheer-up line every third tap.
-    const pool = [...dataLines, ...pageLines]
+    const pool = [...dataLines, ...pageLines, ...buddyLines.study]
     const useCheer = used.current.size % 3 === 2
     const source = useCheer ? buddyLines.cheer : pool
     let options = source.filter((l) => !used.current.has(l))
@@ -106,8 +108,12 @@ export default function StudyBuddy({ page }) {
 
   // Wandering: pick a new spot every so often. Paused while talking, napping, or reduced motion.
   useEffect(() => {
-    if (!enabled || reduced || focusing || bubble || walking) return undefined
+    if (!enabled || focusing || bubble || walking || mood) return undefined
     const t = setTimeout(() => {
+      const roll = Math.random()
+      if (roll < 0.14) { setMood('nap'); return }
+      if (roll < 0.3) { setMood('dance'); return }
+      if (reduced) return
       const { min, max } = bounds()
       if (max - min < 60) return
       let target = rand(min, max)
@@ -119,7 +125,18 @@ export default function StudyBuddy({ page }) {
       setX(target)
     }, rand(5000, 12000))
     return () => clearTimeout(t)
-  }, [enabled, reduced, focusing, bubble, walking, x])
+  }, [enabled, reduced, focusing, bubble, walking, mood, x])
+
+  // Naps and dances end on their own.
+  useEffect(() => {
+    if (!mood) return undefined
+    if (mood === 'dance' && Math.random() < 0.35) setBubble((b) => b || { text: buddyLines.dance[Math.floor(Math.random() * buddyLines.dance.length)], live: false, id: Date.now(), auto: true })
+    const t = setTimeout(() => {
+      setMood(null)
+      setBubble((b) => (b?.auto ? null : b))
+    }, mood === 'nap' ? rand(12000, 22000) : 3600)
+    return () => clearTimeout(t)
+  }, [mood])
 
   // Stop the walk cycle when the stroll ends.
   useEffect(() => {
@@ -141,20 +158,30 @@ export default function StudyBuddy({ page }) {
     return () => clearTimeout(t)
   }, [enabled, say])
 
-  // An occasional unprompted tip, rare enough not to nag. Never during focus.
+  // Regular unprompted tips (about once a minute). Never during focus or while napping.
   useEffect(() => {
-    if (!enabled || focusing || bubble) return undefined
-    const t = setTimeout(() => say(pickLine()), rand(150000, 240000))
+    if (!enabled || focusing || bubble || mood === 'nap') return undefined
+    const t = setTimeout(() => say(pickLine()), rand(40000, 75000))
     return () => clearTimeout(t)
-  }, [enabled, focusing, bubble, say, pickLine])
+  }, [enabled, focusing, bubble, mood, say, pickLine])
+
+  // Sometimes chime in with a tip for the page you just opened.
+  const firstPage = useRef(true)
+  useEffect(() => {
+    if (firstPage.current) { firstPage.current = false; return undefined }
+    if (!enabled || focusing || Math.random() > 0.5) return undefined
+    const t = setTimeout(() => { setMood((m) => (m === 'nap' ? null : m)); say(pickLine()) }, 2500)
+    return () => clearTimeout(t)
+    // Only react to page changes, not to every new line pool.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page])
 
   // Little celebration when a task gets checked off.
   const doneCount = tasks.filter((t) => t.done).length
   const prevDone = useRef(doneCount)
   useEffect(() => {
     if (doneCount > prevDone.current && enabled && !focusing) {
-      setHop(true)
-      setTimeout(() => setHop(false), 700)
+      setMood('dance')
       say(['Yay, one more done!', 'Look at you go!', 'Another petal for today!', 'Checked off. Nice work!'][Math.floor(Math.random() * 4)], { ms: 4000 })
     }
     prevDone.current = doneCount
@@ -162,7 +189,7 @@ export default function StudyBuddy({ page }) {
 
   // Quiet down as soon as a focus session starts.
   useEffect(() => {
-    if (focusing) setBubble(null)
+    if (focusing) { setBubble(null); setMood(null) }
   }, [focusing])
 
   useEffect(() => {
@@ -177,6 +204,13 @@ export default function StudyBuddy({ page }) {
   if (!enabled) return null
 
   function onPetalClick() {
+    if (mood === 'nap' && !focusing) {
+      setMood(null)
+      setHop(true)
+      setTimeout(() => setHop(false), 600)
+      say(`${buddyLines.wake[Math.floor(Math.random() * buddyLines.wake.length)]} ${pickLine()}`, { live: true, ms: 14000 })
+      return
+    }
     if (bubble?.live) { setBubble(null); return }
     setHop(true)
     setTimeout(() => setHop(false), 600)
@@ -193,11 +227,12 @@ export default function StudyBuddy({ page }) {
   }
 
   const rightSide = x > window.innerWidth / 2
-  const sleeping = focusing && !bubble
+  const sleeping = (focusing || mood === 'nap') && !bubble
+  const dancing = mood === 'dance' && !focusing
 
   return (
     <div
-      className={`buddy ${walking && !reduced ? 'walking' : ''} ${hop && !reduced ? 'hop' : ''} ${sleeping ? 'sleeping' : ''}`}
+      className={`buddy ${walking && !reduced ? 'walking' : ''} ${hop && !reduced ? 'hop' : ''} ${sleeping ? 'sleeping' : ''} ${dancing && !reduced ? 'dancing' : ''}`}
       style={{ transform: `translateX(${x}px)`, transitionDuration: `${reduced ? 0 : duration}s` }}
     >
       {bubble && (
@@ -216,11 +251,12 @@ export default function StudyBuddy({ page }) {
       <button
         className="buddy-body"
         onClick={onPetalClick}
-        aria-label={`${buddyName}, your study buddy. ${sleeping ? 'Napping during your focus session. ' : ''}Activate for a tip.`}
-        title={sleeping ? `${buddyName} is napping while you focus` : `Tap ${buddyName} for a tip`}
+        aria-label={`${buddyName}, your study buddy. ${focusing ? 'Napping during your focus session. ' : sleeping ? 'Taking a little nap. ' : ''}Activate for a tip.`}
+        title={focusing ? `${buddyName} is napping while you focus` : sleeping ? `${buddyName} is napping. Tap to wake her` : `Tap ${buddyName} for a tip`}
       >
         <BuddyArt facing={facing} sleeping={sleeping} />
         {sleeping && <span className="buddy-z" aria-hidden="true">z<span>z</span></span>}
+        {dancing && <span className="buddy-notes" aria-hidden="true"><span>♪</span><span>♫</span></span>}
       </button>
     </div>
   )

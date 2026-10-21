@@ -1,6 +1,6 @@
 // Lines for Petal, the study buddy. All original, written for Bloom.
-// Grouped by page so tips stay relevant; `cheer` lines can appear anywhere.
-// To add more, append strings to any list.
+// Grouped by page so tips stay relevant. `study` (general study habits) and `cheer`
+// lines can appear on any page. To add more, append strings to any list.
 
 export const buddyName = 'Petal'
 
@@ -11,6 +11,11 @@ export const buddyLines = {
     'If a task feels huge, rename it to its first small step.',
     'Use the sun icon on the Tasks page to bring something onto today’s list.',
     'Done for the day? Finishing early is allowed.',
+    'Do the hardest thing while your energy is highest, whenever that is for you.',
+    'A short list you finish feels better than a long list you don’t.',
+    'Starting is the hardest part. Give it five minutes and see how it feels.',
+    'Plan tomorrow tonight: one or two tasks is plenty.',
+    'Checking off even a tiny task opens a petal on your flower.',
   ],
   tasks: [
     'Give tasks a due date and they’ll show up in Upcoming deadlines.',
@@ -18,6 +23,11 @@ export const buddyLines = {
     'High priority doesn’t mean all at once. Break it into pieces.',
     'Deleted something by mistake? There’s an Undo button at the bottom.',
     'Small tasks you can finish in 15 minutes are great for low-energy moments.',
+    'Big assignment? Add a task for each step: read, outline, draft, check.',
+    'Set your own due date a day before the real one. Future you will relax.',
+    'If a task keeps getting pushed, ask what’s blocking it, then make that a task.',
+    'Use notes on a task to jot where you left off.',
+    'Finished something? Leave it checked. Seeing progress is motivating.',
   ],
   focus: [
     'Put your phone across the room before you press Start. Future you says thanks.',
@@ -25,6 +35,11 @@ export const buddyLines = {
     'Not feeling it? Try a 15-minute session. Starting is the hardest part.',
     'Pick the course before you start so your session gets counted in the right place.',
     'Water check! When did you last have a sip?',
+    'Decide what you’ll work on before the timer starts, so no time goes to choosing.',
+    'Got distracted? No big deal. Just come back to the task.',
+    'Close the tabs you don’t need for this session.',
+    'Jot stray thoughts on paper and get back to work. Deal with them on your break.',
+    'Long day? A 50/10 rhythm can feel better than 25/5. Try it in the settings.',
   ],
   math: [
     'Stuck on a problem? Write down what you know and what the question asks for.',
@@ -34,6 +49,14 @@ export const buddyLines = {
     'Sketch it! A quick graph catches a lot of sign mistakes.',
     '0/0 in a limit means “simplify,” not “give up.”',
     'Redo a worked example without looking. That’s where it really sticks.',
+    'Equal differences in a table mean linear. Equal ratios mean exponential.',
+    'Isolate the exponential before you take a log.',
+    'Product rule has two terms. Chain rule: don’t forget the inside derivative!',
+    'On a closed interval, always check the endpoints too.',
+    'An average rate uses two points. An instantaneous rate is the limit as they squeeze together.',
+    'Got a wrong answer? Find the exact step where it went off. That’s the lesson.',
+    'Logs ≪ powers ≪ exponentials, in the long run.',
+    'Optimization: write the function, use the constraint, state the domain, then differentiate.',
   ],
   ls1a: [
     'Ask “why does structure lead to this function?” It ties most topics together.',
@@ -42,11 +65,33 @@ export const buddyLines = {
     'For experiment questions, describe the pattern first, then explain it.',
     'Draw it: a messy sketch of a molecule beats rereading a paragraph.',
     'Connect it: which chemical interaction is doing the work here?',
+    'pH below pKa means protonated. pH above pKa means deprotonated.',
+    'ΔG tells you whether something can happen, not how fast.',
+    'Nonpolar things hide from water. That one idea explains membranes and protein folding.',
+    'New strands always grow 5′ → 3′, added onto a free 3′-OH.',
+    'In an experiment, look for the control first. It tells you what “no effect” looks like.',
+    'Wizeprep has an LS 1A page. Making a free account gets you their study booklet (see Resources).',
+    'Make your own flashcard for any idea that surprised you in lecture.',
+    'Try predicting what happens if one variable changes. That’s how the hard questions work.',
   ],
   progress: [
     'Progress is not a grade. It’s just a map of what you’ve done.',
     'Saved items are your personal review list. Visit them before a quiz.',
     'Look back at your week. Notice what helped, and do more of that.',
+    'A quiet day isn’t a failure. Rest days count too.',
+    'Questions you got wrong and then retried are some of your best practice.',
+  ],
+  study: [
+    'Testing yourself beats rereading. Try a practice question before reviewing notes.',
+    'Spread study over several days. Short, spaced sessions stick better than one long cram.',
+    'Mix up problem types when you practice. It feels harder, and that’s good.',
+    'Teach it to an imaginary friend (or me!). Explaining reveals gaps.',
+    'Sleep helps you remember what you studied. Protect it before exams.',
+    'Write a one-line summary at the end of each study session.',
+    'Go to office hours with one specific question. It’s a great habit.',
+    'Study groups work best when everyone attempts the problems first.',
+    'If you’ve read the same paragraph three times, switch to doing a problem.',
+    'Review your notes within a day of lecture. Memory fades fastest early on.',
   ],
   cheer: [
     'You’re doing better than you think.',
@@ -59,6 +104,12 @@ export const buddyLines = {
     'Rest is part of the plan, not a break from it.',
     'You can do hard things, one small step at a time.',
     'I believe in you! (I’m a flower, but still.)',
+    'Confusion is just understanding that hasn’t arrived yet.',
+    'You don’t have to feel ready to start.',
+    'Mistakes are proof you’re trying.',
+    'One page at a time is still a whole book eventually.',
+    'Be kind to yourself today. You’re learning a lot.',
+    'Future you is cheering for present you.',
   ],
   focusing: [
     'I’ll be quiet while you focus. You’ve got this.',
@@ -67,6 +118,18 @@ export const buddyLines = {
   resting: [
     'Break time! Stretch those shoulders.',
     'Nice session. Take a real break: no scrolling, just rest.',
+    'Breathe in… and out. Roll your neck a little.',
+    'Snack? Water? Window? Pick one!',
+  ],
+  wake: [
+    'Oh! I’m awake, I’m awake!',
+    '*yawn* …Did I miss anything?',
+    'Just resting my petals. Hi!',
+  ],
+  dance: [
+    'La la la ♪',
+    'Little study dance! ♪',
+    'Wiggle break! ♫',
   ],
   greet: [
     'Hi! I’m Petal. Tap me anytime for a tip.',

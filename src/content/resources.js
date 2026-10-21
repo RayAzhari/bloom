@@ -56,6 +56,12 @@ export const resources = {
       url: 'https://scienceeducation.fas.harvard.edu/foundational-courses',
     },
     {
+      id: 'r-wizeprep-ls1a', title: 'Wizeprep — LIFESCI 1A at Harvard',
+      description: 'Course-specific study material from Wizeprep (an independent company, not affiliated with Harvard). Create a free account to get their LS 1A booklet; videos and other extras may be paid.',
+      topic: 'Course-aligned review', type: 'notes',
+      url: 'https://www.wizeprep.com/courses/Lifesci1A-harvard-university',
+    },
+    {
       id: 'r-openstax-bio', title: 'OpenStax Biology 2e',
       description: 'Free textbook for science majors, useful for biomolecules, cell structure, DNA, and gene expression.',
       topic: 'Biomolecules & molecular biology', type: 'notes',
