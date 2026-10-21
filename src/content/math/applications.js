@@ -1,0 +1,315 @@
+// Unit 4 — Applications
+// Combines rates of change, derivatives, and limits: linear approximation, extrema,
+// optimization, function behavior & graph sketching, and interpreting derivative
+// information. (The overview lists these under "rates of change"; they are gathered
+// here as a capstone unit.)
+
+const applications = {
+  id: 'applications',
+  number: 4,
+  title: 'Applications',
+  blurb: 'Putting derivatives to work: approximate, optimize, and sketch.',
+  scope: [
+    'Linear approximation',
+    'Finding extrema and solving optimization problems',
+    'Determining function behavior and sketching graphs',
+    'Interpreting derivative information (combines Units 2 and 3)',
+  ],
+
+  concepts: [
+    {
+      id: 'app-linear',
+      title: 'Linear approximation',
+      summary: 'Near a point, a differentiable function looks like its tangent line.',
+      body: [
+        '$$ f(x) ≈ L(x) = f(a) + f′(a)(x − a)  for x near a $$',
+        'This is the tangent line at `a` used as a stand-in for `f`. Choose `a` close to `x` where `f(a)` and `f′(a)` are easy to compute.',
+        '**Over or under?** If `f` is concave up near `a` (`f″ > 0`), the tangent lies below the curve, so `L` **underestimates**. If concave down (`f″ < 0`), `L` **overestimates**.',
+      ],
+      plot: {
+        x: [2, 6.5], y: [1.2, 2.8],
+        fns: [{ f: (x) => Math.sqrt(x), color: 'rose', label: '√x', labelAt: [6.4, 2.45] }, { f: (x) => 2 + (x - 4) / 4, color: 'sage', dashed: true, label: 'L(x)', labelAt: [6.4, 2.72] }],
+        points: [{ x: 4, y: 2, label: '(4, 2)', dy: 16 }],
+      },
+      plotCaption: 'Tangent line to `√x` at 4. Since `√x` is concave down, `L` sits above the curve.',
+      mistakes: ['Using `f′(x)` instead of `f′(a)`. The slope is fixed at the base point.', 'Trusting the approximation far from `a`.'],
+    },
+    {
+      id: 'app-extrema',
+      title: 'Extrema',
+      summary: 'Highest and lowest values happen at critical points or at endpoints.',
+      body: [
+        'A **critical point** of `f` is an `x` in the domain where `f′(x) = 0` or `f′(x)` does not exist. Local extrema (in the interior) can only occur at critical points, but not every critical point is an extremum.',
+        '**First derivative test:** if `f′` changes from + to − at `c`, then `f(c)` is a local max. If it changes from − to +, local min. If there is no sign change, there is no extremum.',
+        '**Second derivative test:** if `f′(c) = 0` and `f″(c) < 0`, local max; if `f″(c) > 0`, local min; if `f″(c) = 0`, the test is inconclusive.',
+        '**Closed interval method** for global extrema of a continuous `f` on `[a, b]`: evaluate `f` at every critical point in the interval **and** at both endpoints. The largest value is the global max and the smallest is the global min.',
+      ],
+      mistakes: ['Forgetting the endpoints on a closed interval.', 'Assuming `f′(c) = 0` guarantees a max or min (`x^{3}` at 0 is a counterexample).', 'Reporting the x-value when asked for the maximum *value* (or vice versa).'],
+    },
+    {
+      id: 'app-optimization',
+      title: 'Optimization',
+      summary: 'Turn a word problem into a one-variable function on a domain, then find its extreme value.',
+      body: [
+        '**A reliable routine:**',
+        '1. Draw and label. Name the quantity to optimize and the variables.',
+        '2. Write the objective function. Use any constraint to reduce it to **one** variable.',
+        '3. State the realistic **domain** (lengths positive, etc.).',
+        '4. Find critical points in the domain. Compare with endpoints, or use a derivative test.',
+        '5. Answer the actual question, with units, and check it makes sense.',
+      ],
+      mistakes: ['Optimizing the constraint instead of the objective.', 'Skipping the domain, which can lead to accepting a critical point that is physically impossible.'],
+    },
+    {
+      id: 'app-sketching',
+      title: 'Behavior & sketching',
+      summary: '`f′` tells you where f rises and falls. `f″` tells you how it bends.',
+      body: [
+        '`f′ > 0`: increasing. `f′ < 0`: decreasing. `f″ > 0`: **concave up** (cup, slopes increasing). `f″ < 0`: **concave down** (cap, slopes decreasing).',
+        'An **inflection point** is where concavity changes, meaning `f″` changes sign. It is not enough that `f″ = 0`.',
+        '**Sketching checklist:** domain → intercepts → critical points and increasing/decreasing → inflection points and concavity → end behavior (limits at ±∞) and asymptotes → plot the key points and connect with the right shape.',
+      ],
+      plot: {
+        x: [-2.5, 2.5], y: [-4, 4],
+        fns: [{ f: (x) => x ** 3 - 3 * x, color: 'rose' }],
+        points: [{ x: -1, y: 2, label: 'local max (−1, 2)' }, { x: 1, y: -2, label: 'local min (1, −2)', dy: 16 }, { x: 0, y: 0, label: 'inflection', dx: 8, dy: 4 }],
+      },
+      plotCaption: '`f(x) = x^{3} − 3x`: rises, falls on `(−1, 1)`, rises again; concavity flips at 0.',
+      mistakes: ['Calling every zero of `f″` an inflection point (`x^{4}` has `f″(0) = 0` but no inflection).', 'Confusing “decreasing” with “concave down.” They are independent.'],
+    },
+    {
+      id: 'app-interpret',
+      title: 'Reading derivative information',
+      summary: 'Given f′ (as a graph, formula, or sign chart), deduce the shape of f.',
+      body: [
+        'If you are shown the graph of `f′` rather than `f`:',
+        'Where `f′` is above the axis, `f` increases. Where `f′` crosses from above to below, `f` has a local max. Where `f′` crosses from below to above, `f` has a local min.',
+        'Where `f′` itself has a peak or valley (`f′` changes from increasing to decreasing or vice versa), `f` has an **inflection point**.',
+        'If `f′` touches zero without changing sign, `f` levels off momentarily and keeps going the same way, so there is no extremum.',
+      ],
+      plot: {
+        x: [-2.5, 2.5], y: [-2, 4],
+        fns: [{ f: (x) => x * x - 1, color: 'sage', label: "f′", labelAt: [2.4, 3.7] }],
+        points: [{ x: -1, y: 0, label: '−1' }, { x: 1, y: 0, label: '1' }],
+      },
+      plotCaption: 'This is the graph of `f′(x) = x^{2} − 1`, not `f`. Then `f` has a local max at −1, a local min at 1, and an inflection point at 0.',
+      mistakes: ['Reading a graph of `f′` as if it were `f`. Always check the label.'],
+    },
+  ],
+
+  examples: [
+    {
+      id: 'app-ex-linear',
+      conceptId: 'app-linear',
+      title: 'Estimating √4.1',
+      problem: 'Use a linear approximation to estimate `√4.1`. Is it an over- or underestimate?',
+      steps: [
+        { do: 'Let `f(x) = √x` and choose `a = 4`.', why: '4 is close to 4.1 and has an easy square root.' },
+        { do: '`f(4) = 2`; `f′(x) = 1/(2√x)`, so `f′(4) = 1/4`.', why: 'Power rule on `x^{1/2}`.' },
+        { do: '`L(x) = 2 + (1/4)(x − 4)`, so `L(4.1) = 2 + 0.025 = 2.025`.', why: 'Tangent line evaluated at the target.' },
+        { do: '`f″(x) = −1/(4x^{3/2}) < 0`: concave down, so the tangent lies above the curve and 2.025 is an **overestimate**.', why: 'Concavity tells you which side of the curve the tangent is on.' },
+      ],
+      answer: '`√4.1 ≈ 2.025`, a slight overestimate (the true value is 2.02485…).',
+      mistakes: ['Using `a = 4.1` (then you would need `√4.1` to start).'],
+      similar: 'app-p3',
+    },
+    {
+      id: 'app-ex-closed',
+      conceptId: 'app-extrema',
+      title: 'Global extrema on a closed interval',
+      problem: 'Find the global max and min of `f(x) = 2x^{3} − 9x^{2} + 12x` on `[0, 3]`.',
+      steps: [
+        { do: '`f′(x) = 6x^{2} − 18x + 12 = 6(x − 1)(x − 2)`.', why: 'Factor to find where the slope is zero.' },
+        { do: 'Critical points: `x = 1` and `x = 2`, both in `[0, 3]`.', why: '`f′` exists everywhere, so only zeros of `f′` count.' },
+        { do: 'Evaluate: `f(0) = 0`, `f(1) = 5`, `f(2) = 4`, `f(3) = 9`.', why: 'Closed interval method: check critical points **and** endpoints.' },
+        { do: 'Largest is 9 at `x = 3`; smallest is 0 at `x = 0`.', why: 'Compare all candidate values.' },
+      ],
+      answer: 'Global max 9 at `x = 3`; global min 0 at `x = 0`. (`x = 1` is only a local max, and `x = 2` is only a local min.)',
+      mistakes: ['Stopping at the critical points and reporting 5 as the maximum. The endpoint `x = 3` wins.'],
+      similar: 'app-p5',
+    },
+    {
+      id: 'app-ex-fence',
+      conceptId: 'app-optimization',
+      title: 'Fencing along a river',
+      problem: 'You have 120 m of fencing to enclose a rectangle along a straight river (no fence needed on the river side). What dimensions maximize the area?',
+      steps: [
+        { do: 'Let `x` = each side perpendicular to the river; the side parallel to the river is `120 − 2x`.', why: 'Fence used: `x + x + (120 − 2x) = 120`. The constraint eliminates one variable.' },
+        { do: 'Area: `A(x) = x(120 − 2x) = 120x − 2x^{2}`, domain `0 < x < 60`.', why: 'Both side lengths must be positive.' },
+        { do: '`A′(x) = 120 − 4x = 0 ⇒ x = 30`.', why: 'Interior critical point.' },
+        { do: '`A″(x) = −4 < 0`, so this is a max. At `x = 30`: parallel side 60 m, area `30 · 60 = 1800` m².', why: 'Concave down everywhere, so the critical point is the global max on the domain.' },
+      ],
+      answer: '30 m × 60 m (the 60 m side runs along the river), area 1800 m².',
+      mistakes: ['Using perimeter `2x + 2y = 120`. The river side has no fence.'],
+      similar: 'app-p7',
+    },
+    {
+      id: 'app-ex-sketch',
+      conceptId: 'app-sketching',
+      title: 'Sketching f(x) = x³ − 3x',
+      problem: 'Describe where `f(x) = x^{3} − 3x` increases, decreases, and changes concavity; find local extrema.',
+      steps: [
+        { do: '`f′(x) = 3x^{2} − 3 = 3(x − 1)(x + 1)`. Critical points `±1`.', why: 'Zeros of the derivative split the line into sign intervals.' },
+        { do: 'Signs: `f′ > 0` on `(−∞, −1)`, `< 0` on `(−1, 1)`, `> 0` on `(1, ∞)`.', why: 'Test e.g. `x = −2, 0, 2`.' },
+        { do: 'Local max at `x = −1`: `f(−1) = 2`. Local min at `x = 1`: `f(1) = −2`.', why: 'First derivative test: + to − is a max, − to + is a min.' },
+        { do: '`f″(x) = 6x`: concave down for `x < 0`, up for `x > 0`; inflection at `(0, 0)`.', why: '`f″` changes sign at 0.' },
+        { do: 'End behavior: `f → ∞` as `x → ∞`, `f → −∞` as `x → −∞`.', why: 'Leading term `x^{3}`.' },
+      ],
+      answer: 'Increasing on `(−∞, −1)` and `(1, ∞)`, decreasing on `(−1, 1)`; local max (−1, 2), local min (1, −2); inflection at (0, 0).',
+      mistakes: ['Treating `(−∞, −1)` and `(1, ∞)` as one increasing stretch. f is not increasing across the gap: `f(−1) = 2 > f(1) = −2`. List the intervals separately.'],
+      similar: 'app-p6',
+    },
+    {
+      id: 'app-ex-fprime',
+      conceptId: 'app-interpret',
+      title: 'From f′ to f',
+      problem: 'Suppose `f′(x) = (x − 2)^{2}(x + 1)`. Where does `f` have local extrema?',
+      steps: [
+        { do: 'Critical points: `x = 2` and `x = −1`.', why: 'Zeros of `f′`.' },
+        { do: 'Sign of `f′`: for `x < −1`, `(x + 1) < 0` so `f′ < 0`; for `−1 < x < 2`, `f′ > 0`; for `x > 2`, `f′ > 0`.', why: '`(x − 2)^{2} ≥ 0` never changes sign; only `(x + 1)` does.' },
+        { do: 'At `x = −1`: − to +, so a local min. At `x = 2`: + to +, so no extremum.', why: 'First derivative test needs a sign change.' },
+      ],
+      answer: 'Local min at `x = −1`; no extremum at `x = 2` (f briefly levels off and keeps increasing).',
+      mistakes: ['Declaring an extremum at every critical point.'],
+      similar: 'app-p8',
+    },
+  ],
+
+  practice: [
+    {
+      id: 'app-p1', level: 'intro', type: 'numeric',
+      prompt: 'Use the tangent line to `f(x) = x^{2}` at `a = 3` to estimate `f(3.1)`.',
+      answer: 9.6, tolerance: 1e-9, display: '9.6',
+      traps: [{ value: 9.61, why: 'That is the exact value 3.1². The question asks for the linear estimate.' }, { value: 9.1, why: 'The slope at 3 is f′(3) = 6, so the change is 6 · 0.1 = 0.6.' }],
+      hints: ['`L(x) = f(3) + f′(3)(x − 3)`.', '`f(3) = 9`, `f′(3) = 6`.'],
+      solution: [{ do: '`L(3.1) = 9 + 6(0.1) = 9.6`.', why: 'Tangent line approximation. (Exact: 9.61, so L underestimates since x² is concave up.)' }],
+    },
+    {
+      id: 'app-p2', level: 'intro', type: 'mc',
+      prompt: 'If `f′(c) = 0` and `f″(c) > 0`, then at `x = c` f has…',
+      choices: [
+        { text: 'a local minimum', correct: true, why: 'Flat tangent and concave up means the bottom of a cup. ✓' },
+        { text: 'a local maximum', why: 'That needs `f″(c) < 0` (concave down).' },
+        { text: 'an inflection point', why: 'Inflection is about `f″` changing sign, not `f″ > 0`.' },
+        { text: 'not enough information', why: 'The second derivative test is conclusive when `f″(c) ≠ 0`.' },
+      ],
+      hints: ['Picture a horizontal tangent on a curve that bends upward.'],
+      solution: [{ do: 'Second derivative test: `f″(c) > 0` ⇒ local min.', why: 'Concave up around a flat point.' }],
+    },
+    {
+      id: 'app-p3', level: 'core', type: 'numeric',
+      prompt: 'Use linear approximation of `ln x` at `x = 1` to estimate `ln(1.05)`.',
+      answer: 0.05, tolerance: 1e-9, display: '0.05',
+      traps: [{ value: Math.log(1.05), why: 'That is the calculator value. The linear estimate is exactly 0.05.' }, { value: 1.05, why: 'L(x) = 0 + 1·(x − 1), so L(1.05) = 0.05.' }],
+      hints: ['`ln 1 = 0` and `(ln x)′ = 1/x`, so the slope at 1 is 1.', '`L(x) = 0 + 1 · (x − 1)`.'],
+      solution: [{ do: '`L(1.05) = 1.05 − 1 = 0.05`.', why: 'Tangent line at 1. (True value ≈ 0.04879, so L overestimates because ln is concave down.)' }],
+    },
+    {
+      id: 'app-p4', level: 'intro', type: 'numeric',
+      prompt: 'Find the critical point of `f(x) = x^{2} − 8x + 3`.',
+      answer: 4, tolerance: 1e-9, display: '`x = 4`',
+      traps: [{ value: -13, why: 'That is f(4), the minimum value. The question asks for x.' }],
+      hints: ['Set `f′(x) = 0`.'],
+      solution: [{ do: '`f′(x) = 2x − 8 = 0 ⇒ x = 4`.', why: 'Critical points are where the derivative is zero (it exists everywhere here).' }],
+    },
+    {
+      id: 'app-p5', level: 'core', type: 'numeric',
+      prompt: 'Find the **maximum value** of `f(x) = −x^{2} + 6x − 4` on `[0, 5]`.',
+      answer: 5, tolerance: 1e-9, display: '5',
+      traps: [{ value: 3, why: 'x = 3 is where the max occurs; the max value is f(3).' }, { value: 1, why: 'f(5) = 1 is an endpoint value, but the interior critical point gives more.' }],
+      hints: ['Find the critical point in `[0, 5]`.', 'Evaluate f at the critical point and both endpoints.'],
+      solution: [
+        { do: '`f′(x) = −2x + 6 = 0 ⇒ x = 3`.', why: 'Interior critical point.' },
+        { do: '`f(0) = −4`, `f(3) = 5`, `f(5) = 1`.', why: 'Closed interval method.' },
+        { do: 'Maximum value 5 (at `x = 3`).', why: 'Largest of the candidates.' },
+      ],
+    },
+    {
+      id: 'app-p6', level: 'core', type: 'mc',
+      prompt: 'Where does `f(x) = x^{4} − 4x^{3}` have inflection points?',
+      choices: [
+        { text: '`x = 0` and `x = 2`', correct: true, why: '`f″ = 12x(x − 2)` changes sign at both 0 and 2. ✓' },
+        { text: '`x = 0` and `x = 3`', why: 'Those are the critical points (`f′ = 4x^{2}(x − 3)`), not inflection points.' },
+        { text: 'only `x = 3`', why: 'x = 3 is a local min, a feature of `f′`’s sign, not of concavity.' },
+        { text: 'only `x = 2`', why: 'Check `x = 0` too: `f″` goes from + (left) to − (right).' },
+      ],
+      hints: ['Compute `f″`.', '`f′ = 4x^{3} − 12x^{2}`, so `f″ = 12x^{2} − 24x`.', 'Factor and check for sign changes.'],
+      solution: [
+        { do: '`f″(x) = 12x^{2} − 24x = 12x(x − 2)`.', why: 'Differentiate twice.' },
+        { do: 'Sign: + for `x < 0`, − on `(0, 2)`, + for `x > 2`.', why: 'Concavity changes at both zeros.' },
+      ],
+    },
+    {
+      id: 'app-p7', level: 'challenge', type: 'numeric',
+      prompt: 'An open-top box is made from a 12 in × 12 in sheet by cutting equal squares of side `x` from each corner and folding up the sides. What is the **maximum volume** (in³)?',
+      answer: 128, tolerance: 1e-9, display: '128 in³',
+      traps: [{ value: 2, why: 'x = 2 is the cut size that maximizes volume. Now compute V(2).' }, { value: 0, why: 'x = 6 also makes V′ = 0, but it gives volume 0, which is a minimum.' }],
+      hints: ['Volume: `V(x) = x(12 − 2x)^{2}` with `0 < x < 6`.', 'Factor `V′(x) = (12 − 2x)(12 − 6x)`.', 'Which critical point lies inside `(0, 6)`?'],
+      solution: [
+        { do: '`V(x) = x(12 − 2x)^{2}`, domain `0 < x < 6`.', why: 'Base is `(12 − 2x)` by `(12 − 2x)`, height `x`.' },
+        { do: '`V′(x) = (12 − 2x)^{2} + x · 2(12 − 2x)(−2) = (12 − 2x)(12 − 6x)`.', why: 'Product rule plus chain rule, then factor out `(12 − 2x)`.' },
+        { do: 'Critical points `x = 6` (not in the open domain, V = 0) and `x = 2`.', why: 'Only `x = 2` is a valid interior point.' },
+        { do: '`V(2) = 2 · 8^{2} = 128` in³. Since V → 0 at both ends of the domain, this is the max.', why: 'Compare with the boundary behavior.' },
+      ],
+    },
+    {
+      id: 'app-p8', level: 'challenge', type: 'mc',
+      prompt: 'The graph below is `f′` (not `f`). Where does `f` have a local maximum?',
+      plot: { x: [-2.5, 2.5], y: [-2, 4], fns: [{ f: (x) => x * x - 1, color: 'sage', label: "f′", labelAt: [2.4, 3.7] }], points: [{ x: -1, y: 0, label: '−1' }, { x: 1, y: 0, label: '1' }] },
+      choices: [
+        { text: '`x = −1`', correct: true, why: '`f′` changes from positive to negative there, so f goes up then down. ✓' },
+        { text: '`x = 1`', why: '`f′` changes from negative to positive at 1, so that is a local min of f.' },
+        { text: '`x = 0`', why: '`f′` has its minimum at 0, which marks an inflection point of f.' },
+        { text: 'Both `x = −1` and `x = 1`', why: 'Only one sign change goes from + to −.' },
+      ],
+      hints: ['Where is `f′` above the axis? Below?', 'A local max of f needs `f′` to switch from + to −.'],
+      solution: [{ do: '`f′ > 0` for `x < −1` and `f′ < 0` on `(−1, 1)`: + to − at −1.', why: 'First derivative test, read off the graph of f′.' }],
+    },
+    {
+      id: 'app-p9', level: 'core', type: 'numeric',
+      prompt: 'A company’s revenue is `R(q) = 50q − 0.5q^{2}` and cost is `C(q) = 10q + 200` (dollars, q items). What quantity `q` maximizes profit?',
+      answer: 40, tolerance: 1e-9, display: '`q = 40` items',
+      traps: [{ value: 50, why: 'q = 50 maximizes revenue, not profit. Subtract cost first.' }, { value: 600, why: 'That is the maximum profit P(40). The question asks for q.' }],
+      hints: ['Profit `P(q) = R(q) − C(q)`.', '`P(q) = 40q − 0.5q^{2} − 200`.'],
+      solution: [
+        { do: '`P(q) = 40q − 0.5q^{2} − 200`.', why: 'Profit is revenue minus cost.' },
+        { do: '`P′(q) = 40 − q = 0 ⇒ q = 40`; `P″ = −1 < 0`, so it is a max.', why: 'Concave down, so the critical point is the global max.' },
+        { do: 'Interpretation: at `q = 40`, marginal revenue `R′ = 10` equals marginal cost `C′ = 10`.', why: 'At the optimum, one more item adds as much cost as revenue.' },
+      ],
+    },
+  ],
+
+  check: [
+    {
+      id: 'app-c1', level: 'intro', type: 'mc',
+      prompt: 'To find the global max of a continuous function on `[a, b]`, you must check…',
+      choices: [
+        { text: 'critical points in `[a, b]` and both endpoints', correct: true, why: 'Global extrema on a closed interval occur at one of these.' },
+        { text: 'only points where `f′ = 0`', why: 'Endpoints and points where f′ doesn’t exist also matter.' },
+        { text: 'only the endpoints', why: 'An interior peak can be higher.' },
+        { text: 'only where `f″ = 0`', why: 'Those are candidate inflection points.' },
+      ],
+      hints: [], solution: [],
+    },
+    {
+      id: 'app-c2', level: 'intro', type: 'mc',
+      prompt: 'If `f″ < 0` near `a`, the linear approximation at `a`…',
+      choices: [
+        { text: 'overestimates f', correct: true, why: 'Concave down means the tangent lies above the curve.' },
+        { text: 'underestimates f', why: 'That is for concave up.' },
+        { text: 'is exact', why: 'Only for linear functions.' },
+        { text: 'cannot be used', why: 'It can, as long as f is differentiable at a.' },
+      ],
+      hints: [], solution: [],
+    },
+    {
+      id: 'app-c3', level: 'intro', type: 'numeric',
+      prompt: 'For `f(x) = x^{3} − 12x`, what is the x-coordinate of the local **minimum**?',
+      answer: 2, tolerance: 1e-9, display: '`x = 2`',
+      traps: [{ value: -2, why: 'x = −2 is the local max (f′ goes + to −).' }],
+      hints: [], solution: [{ do: '`f′ = 3x^{2} − 12 = 3(x − 2)(x + 2)`; − to + at `x = 2`.', why: 'First derivative test.' }],
+    },
+  ],
+}
+
+export default applications
