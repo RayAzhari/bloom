@@ -166,9 +166,10 @@ export default function StudyBuddy({ page }) {
   }, [enabled, focusing, bubble, mood, say, pickLine])
 
   // Sometimes chime in with a tip for the page you just opened.
-  const firstPage = useRef(true)
+  const lastPage = useRef(page)
   useEffect(() => {
-    if (firstPage.current) { firstPage.current = false; return undefined }
+    if (lastPage.current === page) return undefined
+    lastPage.current = page
     if (!enabled || focusing || Math.random() > 0.5) return undefined
     const t = setTimeout(() => { setMood((m) => (m === 'nap' ? null : m)); say(pickLine()) }, 2500)
     return () => clearTimeout(t)
