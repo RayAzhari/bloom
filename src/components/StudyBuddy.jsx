@@ -15,6 +15,7 @@ import { useToast } from './ui'
 // - Can be hidden; the choice is saved in settings.
 
 const SPEED = 34 // px per second, an unhurried stroll
+const NAP_COOLDOWN = 5 * 60 * 1000 // minimum time between spontaneous naps
 const SIDEBAR = 236
 
 function useReducedMotion() {
@@ -51,6 +52,7 @@ export default function StudyBuddy({ page }) {
   const [walking, setWalking] = useState(false)
   const [hop, setHop] = useState(false)
   const [mood, setMood] = useState(null) // null | 'nap' | 'dance'
+  const lastNap = useRef(Date.now()) // no nap right after the page loads
   const [bubble, setBubble] = useState(null) // { text, live }
   const used = useRef(new Set())
   const bubbleTimer = useRef(null)
@@ -111,8 +113,9 @@ export default function StudyBuddy({ page }) {
     if (!enabled || focusing || bubble || walking || mood) return undefined
     const t = setTimeout(() => {
       const roll = Math.random()
-      if (roll < 0.14) { setMood('nap'); return }
-      if (roll < 0.3) { setMood('dance'); return }
+      // Naps are rare: about 1 in 20 pauses, at most once every 5 minutes.
+      if (roll < 0.05 && Date.now() - lastNap.current > NAP_COOLDOWN) { lastNap.current = Date.now(); setMood('nap'); return }
+      if (roll < 0.21) { setMood('dance'); return }
       if (reduced) return
       const { min, max } = bounds()
       if (max - min < 60) return
@@ -134,7 +137,7 @@ export default function StudyBuddy({ page }) {
     const t = setTimeout(() => {
       setMood(null)
       setBubble((b) => (b?.auto ? null : b))
-    }, mood === 'nap' ? rand(12000, 22000) : 3600)
+    }, mood === 'nap' ? rand(6000, 10000) : 3600)
     return () => clearTimeout(t)
   }, [mood])
 
