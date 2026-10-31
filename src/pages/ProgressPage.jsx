@@ -173,7 +173,7 @@ export default function ProgressPage() {
       </section>
 
       <section className="card flat small muted row between">
-        <span>All of your data is stored only in this browser (localStorage). Nothing is sent anywhere. Clearing your browser data also clears Bloom.</span>
+        <span>Your tasks, answers, flashcards, and settings are stored only in this browser (localStorage) and are never uploaded. The site does count anonymous page visits with Vercel Web Analytics, which uses no cookies. Clearing your browser data also clears Bloom.</span>
         <button className="btn btn-ghost btn-sm" onClick={() => setConfirm(true)}><Trash2 aria-hidden="true" /> Reset all data</button>
       </section>
 

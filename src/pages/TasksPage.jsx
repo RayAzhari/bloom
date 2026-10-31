@@ -96,7 +96,7 @@ export default function TasksPage() {
             <ul style={{ margin: '6px 0 0', paddingLeft: 18 }}>
               <li>Overdue and due-today tasks join today’s list automatically.</li>
               <li>Deleted something by accident? Use “Undo” in the message at the bottom.</li>
-              <li>Everything is saved in this browser only.</li>
+              <li>Your tasks are saved in this browser only.</li>
             </ul>
           </section>
         </aside>

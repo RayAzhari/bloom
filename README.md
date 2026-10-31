@@ -1,7 +1,8 @@
 # Bloom
 
 A calm study companion: tasks, a focus timer, and study spaces for Math MA and LS 1A.
-Runs entirely in the browser. There's no backend or account; everything is saved in `localStorage`.
+Runs entirely in the browser. There's no backend or account; all study data is saved in `localStorage`.
+The deployed site counts anonymous page views with Vercel Web Analytics (`@vercel/analytics`, no cookies). Enable it under Project → Analytics in Vercel.
 
 ## Run locally
 

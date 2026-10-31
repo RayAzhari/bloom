@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import { FlaskConical, House, ListChecks, Sigma, Sprout, Timer as TimerIcon } from 'lucide-react'
 import { useRoute, href } from './lib/router'
 import { useBloom } from './state/BloomStore'
@@ -104,6 +105,10 @@ export default function App() {
       </main>
 
       <StudyBuddy page={page} />
+
+      {/* Anonymous page-view counts (Vercel Web Analytics). Bloom uses hash routes, so the
+          section and path are passed explicitly; only the route is sent, never study data. */}
+      <Analytics route={`/${page}`} path={`/${parts.join('/')}`} />
 
       <nav className="bottom-nav" aria-label="Main">
         {NAV.map((n) => {
