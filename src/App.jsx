@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Analytics } from '@vercel/analytics/react'
 import { FlaskConical, House, ListChecks, Sigma, Sprout, Timer as TimerIcon } from 'lucide-react'
+import { Analytics } from '@vercel/analytics/react'
 import { useRoute, href } from './lib/router'
 import { useBloom } from './state/BloomStore'
 import { useTimer } from './state/TimerStore'
@@ -120,6 +121,8 @@ export default function App() {
           )
         })}
       </nav>
+
+      <Analytics />
     </div>
   )
 }
